@@ -18,6 +18,7 @@ public class AerolineaController {
 
     @PostMapping("/save")
     public AerolineaEntity save(@RequestBody AerolineaEntity aerolineaEntity) {
-        return aerolineaRepository.save(aerolineaEntity);
+        AerolineaEntity savedEntity = aerolineaRepository.save(aerolineaEntity);
+        return aerolineaRepository.save(savedEntity);
     }
 }

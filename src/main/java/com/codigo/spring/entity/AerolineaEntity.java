@@ -1,9 +1,17 @@
 package com.codigo.spring.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "aerolineas")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class AerolineaEntity {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -11,28 +19,4 @@ public class AerolineaEntity {
     private int id;
     private String nombre;
 
-    public AerolineaEntity(int id, String nombre) {
-        this.id = id;
-        this.nombre = nombre;
-    }
-
-    public AerolineaEntity() {
-
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
 }
