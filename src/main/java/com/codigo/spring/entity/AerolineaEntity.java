@@ -20,3 +20,5 @@ public class AerolineaEntity {
     private String nombre;
 
 }
+// realizar la implementacion para poder
+// guardar un pasajero
