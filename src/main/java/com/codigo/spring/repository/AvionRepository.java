@@ -13,4 +13,5 @@ public interface AvionRepository extends JpaRepository<AvionEntity, Integer> {
     @Query(value = "SELECT * FROM aviones WHERE capacidad > :min AND capacidad < :max", nativeQuery = true)
     List<AvionEntity> findByCapacidad(int min, int max);
     List<AvionEntity> findByCapacidadBetween(int min, int max);
+
 }

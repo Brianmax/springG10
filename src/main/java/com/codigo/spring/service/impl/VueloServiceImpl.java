@@ -10,6 +10,9 @@ import com.codigo.spring.response.VueloResponse;
 import com.codigo.spring.service.VueloService;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -54,6 +57,30 @@ public class VueloServiceImpl implements VueloService {
         vueloResponse.setOrigen(vueloEntity.getOrigen());
         vueloResponse.setDestino(vueloEntity.getDestino());
         vueloResponse.setAvion(new AvionResponseBase(vueloEntity.getAvion().getCapacidad(), vueloEntity.getAvion().getModelo()));
+        return vueloResponse;
+    }
+
+    @Override
+    public List<VueloResponse> findAllByFechaSalida(Date fechaSalida) {
+        List<VueloEntity> vueloEntities = vueloRepository.findByFechaSalida(fechaSalida);
+        List<VueloResponse> vueloResponses = new ArrayList<>();
+
+        for(VueloEntity vueloEntity : vueloEntities) {
+            vueloResponses.add(getVueloResponse(vueloEntity));
+        }
+        return vueloResponses;
+    }
+
+    private VueloResponse getVueloResponse(VueloEntity vueloEntity) {
+        VueloResponse vueloResponse = new VueloResponse();
+        vueloResponse.setOrigen(vueloEntity.getOrigen());
+        vueloResponse.setDestino(vueloEntity.getDestino());
+        vueloResponse.setFechaSalida(vueloEntity.getFechaSalida());
+        vueloResponse.setFechaLlegada(vueloEntity.getFechaLlegada());
+        vueloResponse.setAvion(new AvionResponseBase(
+                vueloEntity.getAvion().getCapacidad(),
+                vueloEntity.getAvion().getModelo()
+        ));
         return vueloResponse;
     }
 }
