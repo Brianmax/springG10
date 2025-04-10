@@ -5,7 +5,7 @@ import com.codigo.spring.entity.VueloEntity;
 import com.codigo.spring.repository.AvionRepository;
 import com.codigo.spring.repository.VueloRepository;
 import com.codigo.spring.request.VueloRequest;
-import com.codigo.spring.response.AvionResponse;
+import com.codigo.spring.response.AvionResponseBase;
 import com.codigo.spring.response.VueloResponse;
 import com.codigo.spring.service.VueloService;
 import org.springframework.stereotype.Service;
@@ -53,7 +53,7 @@ public class VueloServiceImpl implements VueloService {
         vueloResponse.setFechaLlegada(vueloEntity.getFechaLlegada());
         vueloResponse.setOrigen(vueloEntity.getOrigen());
         vueloResponse.setDestino(vueloEntity.getDestino());
-        vueloResponse.setAvion(new AvionResponse(vueloEntity.getAvion().getCapacidad(), vueloEntity.getAvion().getModelo()));
+        vueloResponse.setAvion(new AvionResponseBase(vueloEntity.getAvion().getCapacidad(), vueloEntity.getAvion().getModelo()));
         return vueloResponse;
     }
 }

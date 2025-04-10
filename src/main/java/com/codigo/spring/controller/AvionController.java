@@ -2,6 +2,8 @@ package com.codigo.spring.controller;
 
 import com.codigo.spring.entity.AvionEntity;
 import com.codigo.spring.repository.AvionRepository;
+import com.codigo.spring.response.AvionResponse;
+import com.codigo.spring.service.AvionService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,8 +12,10 @@ import java.util.List;
 @RequestMapping("/api/v1/avion")
 public class AvionController {
     private AvionRepository avionRepository;
-    public AvionController(AvionRepository avionRepository) {
+    private final AvionService avionService;
+    public AvionController(AvionRepository avionRepository, AvionService avionService) {
         this.avionRepository = avionRepository;
+        this.avionService = avionService;
     }
 
     @PostMapping("/save")
@@ -27,8 +31,8 @@ public class AvionController {
     }
 
     @GetMapping("/find/capacidad")
-    public List<AvionEntity> findAllCapacidad(@RequestParam int min, @RequestParam int max) {
-        return avionRepository.findByCapacidad(min, max);
+    public List<AvionResponse> findAllCapacidad(@RequestParam int min, @RequestParam int max) {
+        return avionService.findAllCapacidad(min, max);
     }
 
 }

@@ -1,13 +1,18 @@
 package com.codigo.spring.response;
 
-import lombok.AllArgsConstructor;
+
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.stereotype.Service;
 
 @Getter
 @Setter
-@AllArgsConstructor
-public class AvionResponse {
-    private int capacidad;
-    private String modelo;
+public class AvionResponse extends AvionResponseBase{
+    private int peso;
+    private String aerolinea;
+    public AvionResponse(int capacidad, String modelo, int peso, String aerolinea) {
+        super(capacidad, modelo);
+        this.peso = peso;
+        this.aerolinea = aerolinea;
+    }
 }

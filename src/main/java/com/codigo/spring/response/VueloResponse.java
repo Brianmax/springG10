@@ -1,6 +1,5 @@
 package com.codigo.spring.response;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,5 +13,5 @@ public class VueloResponse {
     private String origen;
     private String destino;
 
-    private AvionResponse avion;
+    private AvionResponseBase avion;
 }
