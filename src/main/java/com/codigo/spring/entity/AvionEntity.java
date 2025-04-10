@@ -1,5 +1,6 @@
 package com.codigo.spring.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +18,7 @@ public class AvionEntity {
     private int peso;
     private String modelo;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_aerolinea_fk")
     private AerolineaEntity aerolinea;
