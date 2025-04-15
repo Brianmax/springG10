@@ -3,6 +3,7 @@ package com.codigo.spring.controller;
 import com.codigo.spring.entity.AvionEntity;
 import com.codigo.spring.repository.AvionRepository;
 import com.codigo.spring.response.AvionResponse;
+import com.codigo.spring.response.ResponseBase;
 import com.codigo.spring.service.AvionService;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,4 +36,10 @@ public class AvionController {
         return avionService.findAllCapacidad(min, max);
     }
 
+    // actualizar la aerolinea de un avion
+
+    @PutMapping("/update")
+    public ResponseBase<AvionResponse> updateAerolinea(@RequestParam int idAvion, @RequestParam int idNuevaAerlinea) {
+        return avionService.updateAerolinea(idAvion, idNuevaAerlinea);
+    }
 }
