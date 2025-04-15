@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -23,4 +24,7 @@ public class VueloEntity {
     @ManyToOne
     @JoinColumn(name = "id_avion_fk")
     private AvionEntity avion;
+
+    @ManyToMany(mappedBy = "vuelos")
+    private List<PilotoEntity> pilotos;
 }

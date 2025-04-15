@@ -1,10 +1,12 @@
 package com.codigo.spring.service.impl;
 
 import com.codigo.spring.entity.AvionEntity;
+import com.codigo.spring.entity.PilotoEntity;
 import com.codigo.spring.entity.VueloEntity;
 import com.codigo.spring.repository.AvionRepository;
 import com.codigo.spring.repository.VueloRepository;
 import com.codigo.spring.request.VueloRequest;
+import com.codigo.spring.request.VueloRequestUpdatePilotos;
 import com.codigo.spring.response.AvionResponseBase;
 import com.codigo.spring.response.VueloResponse;
 import com.codigo.spring.service.VueloService;
@@ -69,6 +71,13 @@ public class VueloServiceImpl implements VueloService {
             vueloResponses.add(getVueloResponse(vueloEntity));
         }
         return vueloResponses;
+    }
+
+    @Override
+    public VueloResponse addPiltosToVuelo(VueloRequestUpdatePilotos vueloRequestUpdatePilotos) {
+        List<PilotoEntity> pilotosVuelo = vueloRepository.findPilotosByVuelo(vueloRequestUpdatePilotos.getIdVuelo());
+        
+        return null;
     }
 
     private VueloResponse getVueloResponse(VueloEntity vueloEntity) {
