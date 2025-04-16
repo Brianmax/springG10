@@ -4,12 +4,15 @@ import com.codigo.spring.entity.AvionEntity;
 import com.codigo.spring.entity.PilotoEntity;
 import com.codigo.spring.entity.VueloEntity;
 import com.codigo.spring.repository.AvionRepository;
+import com.codigo.spring.repository.PilotoRepository;
 import com.codigo.spring.repository.VueloRepository;
 import com.codigo.spring.request.VueloRequest;
 import com.codigo.spring.request.VueloRequestUpdatePilotos;
 import com.codigo.spring.response.AvionResponseBase;
+import com.codigo.spring.response.ResponseBase;
 import com.codigo.spring.response.VueloResponse;
 import com.codigo.spring.service.VueloService;
+import com.codigo.spring.utils.Constants;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -21,10 +24,12 @@ import java.util.Optional;
 public class VueloServiceImpl implements VueloService {
     private VueloRepository vueloRepository;
     private final AvionRepository avionRepository;
+    private final PilotoRepository pilotoRepository;
 
-    public VueloServiceImpl(VueloRepository vueloRepository, AvionRepository avionRepository) {
+    public VueloServiceImpl(VueloRepository vueloRepository, AvionRepository avionRepository, PilotoRepository pilotoRepository) {
         this.vueloRepository = vueloRepository;
         this.avionRepository = avionRepository;
+        this.pilotoRepository = pilotoRepository;
     }
 
     @Override
@@ -74,10 +79,50 @@ public class VueloServiceImpl implements VueloService {
     }
 
     @Override
-    public VueloResponse addPiltosToVuelo(VueloRequestUpdatePilotos vueloRequestUpdatePilotos) {
-        List<PilotoEntity> pilotosVuelo = vueloRepository.findPilotosByVuelo(vueloRequestUpdatePilotos.getIdVuelo());
-        
+    public ResponseBase<VueloResponse> addPiltosToVuelo(VueloRequestUpdatePilotos vueloRequestUpdatePilotos) {
+        // List<PilotoEntity> pilotosVuelo = vueloRepository.findPilotosByVuelo(vueloRequestUpdatePilotos.getIdVuelo());
+        List<PilotoEntity> nuevosPilotos = pilotoRepository.findPilotosByIds(vueloRequestUpdatePilotos.getIdsPilotos());
+        Optional<VueloEntity> vueloEntityOptional = vueloRepository.findById(vueloRequestUpdatePilotos.getIdVuelo());
+
+        if(vueloEntityOptional.isEmpty() || nuevosPilotos.size() != vueloRequestUpdatePilotos.getIdsPilotos().size()) {
+            return new ResponseBase<VueloResponse>(Constants.CODE_NOT_FOUND, Constants.MESSAGE_NOT_FOUND, Optional.empty());
+        }
+        VueloEntity vueloEntity = vueloEntityOptional.get();
+        List<PilotoEntity> pilotosVuelo = vueloEntity.getPilotos();
+
+        for (PilotoEntity piloto : nuevosPilotos) {
+            if (!pilotosVuelo.contains(piloto)) {
+                pilotosVuelo.add(piloto);
+                piloto.getVuelos().add(vueloEntity);
+            }
+        }
+
+        // pilotosVuelo.addAll(nuevosPilotos);
+        vueloEntity.setPilotos(pilotosVuelo);
+        vueloRepository.save(vueloEntity);
+
+        VueloResponse vueloResponse = new VueloResponse(
+                vueloEntity.getFechaSalida(),
+                vueloEntity.getFechaLlegada(),
+                vueloEntity.getOrigen(),
+                vueloEntity.getDestino(),
+                new AvionResponseBase(vueloEntity.getAvion().getCapacidad(), vueloEntity.getAvion().getModelo()),
+                processPilotos(pilotosVuelo)
+        );
+        return new ResponseBase<>(Constants.CODE_SUCCESS, Constants.MESSAGE_SUCCESS, Optional.of(vueloResponse));
+    }
+
+    @Override
+    public ResponseBase<VueloResponse> removePilotosFromVuelo(VueloRequestUpdatePilotos vueloRequestUpdatePilotos) {
         return null;
+    }
+
+     private List<String> processPilotos(List<PilotoEntity> pilotoEntities) {
+        List<String> pilotos = new ArrayList<>();
+        for(PilotoEntity pilotoEntity : pilotoEntities) {
+            pilotos.add(pilotoEntity.getNombre().charAt(0) + ". " + pilotoEntity.getApellido());
+        }
+        return pilotos;
     }
 
     private VueloResponse getVueloResponse(VueloEntity vueloEntity) {
