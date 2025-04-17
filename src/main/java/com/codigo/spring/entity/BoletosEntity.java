@@ -24,4 +24,8 @@ public class BoletosEntity {
     @ManyToOne
     @JoinColumn(name = "id_vuelo_fk")
     private VueloEntity vuelo;
+
+    // asiento,
+    // idPasajero,
+    // idVuelo
 }

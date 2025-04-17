@@ -4,8 +4,12 @@ import com.codigo.spring.entity.BoletosEntity;
 import com.codigo.spring.entity.PasajeroEntity;
 import com.codigo.spring.repository.BoletoRepository;
 import com.codigo.spring.repository.PasajeroRepository;
+import com.codigo.spring.response.PasajeroInfoResponse;
+import com.codigo.spring.response.ResponseBase;
+import com.codigo.spring.utils.Constants;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,11 +46,25 @@ public class PasajeroController {
     // nombre, apellido, asiento, origen, destino
 
     @GetMapping("/find/boleto/{id}")
-    public PasajeroEntity findBoleto(@PathVariable int id) {
+    public ResponseBase<PasajeroInfoResponse> findBoleto(@PathVariable int id) {
         List<BoletosEntity> boletos = boletoRepository.findBoletosByPasajero(id);
         if(boletos.isEmpty()) {
             return null;
         }
-        return null;
+        PasajeroInfoResponse pasajeroInfoResponse = new PasajeroInfoResponse();
+        pasajeroInfoResponse.setNombre(boletos.get(0).getPasajero().getNombre());
+        pasajeroInfoResponse.setApellido(boletos.get(0).getPasajero().getApellido());
+        pasajeroInfoResponse.setBoletos(new ArrayList<>());
+        for(BoletosEntity boleto: boletos) {
+            pasajeroInfoResponse.getBoletos().add(new PasajeroInfoResponse.BoletoInfo(
+                    boleto.getVuelo().getOrigen(),
+                    boleto.getVuelo().getDestino(),
+                    boleto.getAsiento()
+            ));
+        }
+        return new ResponseBase<>(
+                Constants.CODE_SUCCESS,
+                Constants.MESSAGE_SUCCESS_FIND,
+                Optional.of(pasajeroInfoResponse));
     }
 }

@@ -109,7 +109,7 @@ public class VueloServiceImpl implements VueloService {
                 new AvionResponseBase(vueloEntity.getAvion().getCapacidad(), vueloEntity.getAvion().getModelo()),
                 processPilotos(pilotosVuelo)
         );
-        return new ResponseBase<>(Constants.CODE_SUCCESS, Constants.MESSAGE_SUCCESS, Optional.of(vueloResponse));
+        return new ResponseBase<>(Constants.CODE_SUCCESS, Constants.MESSAGE_SUCCESS_UPDATE, Optional.of(vueloResponse));
     }
 
     @Override
@@ -140,7 +140,7 @@ public class VueloServiceImpl implements VueloService {
                 new AvionResponseBase(vueloEntity.getAvion().getCapacidad(), vueloEntity.getAvion().getModelo()),
                 processPilotos(pilotosVuelo)
         );
-        return new ResponseBase<>(Constants.CODE_SUCCESS, Constants.MESSAGE_SUCCESS, Optional.of(vueloResponse));
+        return new ResponseBase<>(Constants.CODE_SUCCESS, Constants.MESSAGE_SUCCESS_UPDATE, Optional.of(vueloResponse));
     }
 
      private List<String> processPilotos(List<PilotoEntity> pilotoEntities) {
