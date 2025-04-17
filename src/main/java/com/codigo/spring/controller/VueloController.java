@@ -37,9 +37,13 @@ public class VueloController {
     }
     // actualizar el avion de un determinado vuelo
 
-    @PutMapping("/update/pilotos")
+    @PutMapping("/update/pilotos/add")
     public ResponseBase<VueloResponse> updatePilotos(@RequestBody VueloRequestUpdatePilotos vueloRequest) {
         return vueloService.addPiltosToVuelo(vueloRequest);
     }
 
+    @PutMapping("/update/pilotos/remove")
+    public ResponseBase<VueloResponse> removePilotos(@RequestBody VueloRequestUpdatePilotos vueloRequest) {
+        return vueloService.removePilotosFromVuelo(vueloRequest);
+    }
 }

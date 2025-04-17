@@ -85,7 +85,7 @@ public class VueloServiceImpl implements VueloService {
         Optional<VueloEntity> vueloEntityOptional = vueloRepository.findById(vueloRequestUpdatePilotos.getIdVuelo());
 
         if(vueloEntityOptional.isEmpty() || nuevosPilotos.size() != vueloRequestUpdatePilotos.getIdsPilotos().size()) {
-            return new ResponseBase<VueloResponse>(Constants.CODE_NOT_FOUND, Constants.MESSAGE_NOT_FOUND, Optional.empty());
+            return new ResponseBase<>(Constants.CODE_NOT_FOUND, Constants.MESSAGE_NOT_FOUND, Optional.empty());
         }
         VueloEntity vueloEntity = vueloEntityOptional.get();
         List<PilotoEntity> pilotosVuelo = vueloEntity.getPilotos();
@@ -98,7 +98,7 @@ public class VueloServiceImpl implements VueloService {
         }
 
         // pilotosVuelo.addAll(nuevosPilotos);
-        vueloEntity.setPilotos(pilotosVuelo);
+        //vueloEntity.setPilotos(pilotosVuelo);
         vueloRepository.save(vueloEntity);
 
         VueloResponse vueloResponse = new VueloResponse(
@@ -114,7 +114,33 @@ public class VueloServiceImpl implements VueloService {
 
     @Override
     public ResponseBase<VueloResponse> removePilotosFromVuelo(VueloRequestUpdatePilotos vueloRequestUpdatePilotos) {
-        return null;
+        Optional<VueloEntity> vueloEntityOptional = vueloRepository.findById(vueloRequestUpdatePilotos.getIdVuelo());
+        List<PilotoEntity> pilotosEliminar = pilotoRepository.findPilotosByIds(vueloRequestUpdatePilotos.getIdsPilotos());
+
+        if(vueloEntityOptional.isEmpty()) {
+            return new ResponseBase<>(Constants.CODE_NOT_FOUND, Constants.MESSAGE_NOT_FOUND, Optional.empty());
+        }
+
+        VueloEntity vueloEntity = vueloEntityOptional.get();
+        List<PilotoEntity> pilotosVuelo = vueloEntity.getPilotos();
+
+        for(PilotoEntity piloto : pilotosEliminar) {
+            pilotosVuelo.remove(piloto);
+            // eliminar el vuelo relacionado al piloto
+            piloto.getVuelos().remove(vueloEntity);
+        }
+
+        vueloEntity.setPilotos(pilotosVuelo);
+        vueloRepository.save(vueloEntity);
+        VueloResponse vueloResponse = new VueloResponse(
+                vueloEntity.getFechaSalida(),
+                vueloEntity.getFechaLlegada(),
+                vueloEntity.getOrigen(),
+                vueloEntity.getDestino(),
+                new AvionResponseBase(vueloEntity.getAvion().getCapacidad(), vueloEntity.getAvion().getModelo()),
+                processPilotos(pilotosVuelo)
+        );
+        return new ResponseBase<>(Constants.CODE_SUCCESS, Constants.MESSAGE_SUCCESS, Optional.of(vueloResponse));
     }
 
      private List<String> processPilotos(List<PilotoEntity> pilotoEntities) {
