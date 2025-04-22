@@ -2,6 +2,7 @@ package com.codigo.spring.service.impl;
 
 import com.codigo.spring.entity.AerolineaEntity;
 import com.codigo.spring.entity.AvionEntity;
+import com.codigo.spring.mapper.AvionMapper;
 import com.codigo.spring.repository.AerolineaRepository;
 import com.codigo.spring.repository.AvionRepository;
 import com.codigo.spring.response.AvionResponse;
@@ -41,12 +42,7 @@ public class AvionServiceImpl implements AvionService {
         List<AvionEntity> list = avionRepository.findByCapacidad(min, max);
         List<AvionResponse> responseList = new ArrayList<>();
         for(AvionEntity avionEntity : list){
-            responseList.add(new AvionResponse(
-                    avionEntity.getCapacidad(),
-                    avionEntity.getModelo(),
-                    avionEntity.getPeso(),
-                    avionEntity.getAerolinea().getNombre()
-                    ));
+            responseList.add(AvionMapper.INSTANCE.toAvionResponse(avionEntity, avionEntity.getAerolinea()));
         }
         return responseList;
     }

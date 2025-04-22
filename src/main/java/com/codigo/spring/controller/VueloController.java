@@ -6,6 +6,8 @@ import com.codigo.spring.request.VueloRequestUpdatePilotos;
 import com.codigo.spring.response.ResponseBase;
 import com.codigo.spring.response.VueloResponse;
 import com.codigo.spring.service.VueloService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
@@ -13,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/vuelo")
+@Tag(name = "Controlador para vuelo", description = "Operaciones CRUD para vuelo")
 public class VueloController {
 
     private VueloService vueloService;
@@ -31,6 +34,7 @@ public class VueloController {
         return vueloService.findById(id);
     }
 
+    @Operation(summary = "Este endpoint busca todos los vuelos despues de la fecha dada")
     @GetMapping("/find")
     public List<VueloResponse> findByFecha(@RequestParam Date fechaSalida) {
         return vueloService.findAllByFechaSalida(fechaSalida);

@@ -25,7 +25,10 @@ public class BoletosEntity {
     @JoinColumn(name = "id_vuelo_fk")
     private VueloEntity vuelo;
 
+    // agregar un boleto. El boleto debe de tener un pasajer y un vuelo
     // asiento,
     // idPasajero,
     // idVuelo
+    // buscar todos los pasajeros de el vuelo
+
 }
